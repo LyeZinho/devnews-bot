@@ -79,6 +79,7 @@ function commandDataReader(){
     const fs = require('fs');
     // Avoid linux file system changes
     const path = require('path');
+
     const commandFiles = fs.readdirSync(path.join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
     const commandsData = [];
     for (const file of commandFiles) {
@@ -95,6 +96,7 @@ function commandReader(){
     const fs = require('fs');
     // Avoid linux file system changes
     const path = require('path');
+
     const commandFiles = fs.readdirSync(path.join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
     const commandsData = [];
     for (const file of commandFiles) {
