@@ -77,11 +77,12 @@ setInterval(async function(){
 function commandDataReader(){
     // Read each file in the commands folder
     const fs = require('fs');
+    // Avoid linux file system changes
     const path = require('path');
-    const commandFiles = fs.readdirSync('/commands/').filter(file => file.endsWith('.js'));
+    const commandFiles = fs.readdirSync(path.join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
     const commandsData = [];
     for (const file of commandFiles) {
-        const command = require(`/commands/${file}`);
+        const command = require(`./commands/${file}`);
         commandsData.push(command);
     }
     return commandsData;
@@ -90,8 +91,11 @@ function commandDataReader(){
 function commandReader(){
     // Read each file in the commands folder
     // But get only the name and description
+    // Read each file in the commands folder
     const fs = require('fs');
-    const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+    // Avoid linux file system changes
+    const path = require('path');
+    const commandFiles = fs.readdirSync(path.join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
     const commandsData = [];
     for (const file of commandFiles) {
         const command = require(`./commands/${file}`);
