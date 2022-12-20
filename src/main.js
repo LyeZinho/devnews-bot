@@ -42,7 +42,34 @@ const {makeOneContent, clearContent} = require('./functions/crawler');
 const {saveNumber, getNumber} = require('./functions/saveindex')
 
 // Timer
-const cron = require('node-cron');
+// Interval every minute
+setInterval(async function(){
+    if (validateTime()){
+        // Get the number of the last post
+        const number = getNumber();
+        // Get the news
+        const news = await makeOneContent(number).then((data) => {
+            // Clear content
+            const content = clearContent(data.body);
+
+            // Save the number of the last post
+            saveNumber(number + 1);
+
+            // Save the time of the last post
+            saveTime();
+
+            // Send the news
+            const channel = client.channels.cache.get(`${CHANEL_ID}`);
+            channel.threads.create({ name: data.title, message: { content: content }, appliedTags: ['1054876475553239090'] });
+
+            console.log("News sent!");
+        });
+    }
+    else {
+        console.log("Not time yet!");
+    }
+}, 60000);
+        
 
 
 
