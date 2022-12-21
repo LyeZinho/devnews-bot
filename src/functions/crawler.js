@@ -30,7 +30,9 @@ async function getContents() {
       if (error) {
         reject(error);
       }
-      resolve(body);
+      resolve(
+        JSON.parse(body)
+      );
     });
   });
 }
@@ -69,7 +71,9 @@ async function getContent(username, slug) {
       if (error) {
         reject(error);
       }
-      resolve(body);
+      resolve(
+        JSON.parse(body)
+      );
     });
   });
 }
@@ -103,23 +107,24 @@ async function makeContent() {
     */
 
 async function makeOneContent(index) {
-  let contents = await getContents();
-  // Try to get from given index if empty get from random index
-    try {
-        let content = await getContent(
-            contents[index].owner_username,
-            contents[index].slug
-        );
-        return content;
-    }
-    catch (error) {
-        let randomIndex = Math.floor(Math.random() * contents.length);
-        let content = await getContent(
-            contents[randomIndex].owner_username,
-            contents[randomIndex].slug
-        );
-        return content;
-    }
+  // Try for a randon number if retunr empty
+  try{
+    let contents = await getContents();
+    let content = await getContent(
+      contents[index].owner_username,
+      contents[index].slug
+    );
+    return content;
+  }
+  catch{
+    let contents = await getContents();
+    let random = Math.floor(Math.random() * (contents.length - 0) + 0);
+    let content = await getContent(
+      contents[random].owner_username,
+      contents[random].slug
+    );
+    return content;
+  }
 }
 
 function clearContent(imput) {

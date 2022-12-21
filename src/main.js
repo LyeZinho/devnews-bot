@@ -68,7 +68,7 @@ setInterval(async function(){
     else {
         console.log("Not time yet!");
     }
-}, 60000);
+}, 1000);
         
 
 
