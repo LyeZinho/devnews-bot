@@ -41,6 +41,10 @@ const {saveTime, validateTime} = require('./functions/time');
 const {makeOneContent, clearContent} = require('./functions/crawler');
 const {saveNumber, getNumber} = require('./functions/saveindex')
 
+// Send the news
+// const channel = client.channels.cache.get(`${CHANEL_ID}`);
+// channel.threads.create({ name: data.title, message: { content: content }, appliedTags: ['1054876475553239090'] });
+
 // Timer
 // Interval every minute
 setInterval(async function(){
@@ -48,27 +52,26 @@ setInterval(async function(){
         // Get the number of the last post
         const number = getNumber();
         // Get the news
-        const news = await makeOneContent(number).then((data) => {
-            // Clear content
-            const content = clearContent(data.body);
-
-            // Save the number of the last post
-            saveNumber(number + 1);
-
-            // Save the time of the last post
-            saveTime();
-
+        // Validate if content.body have more than 4000 characters if true dont update date and increase index number
+        let content = await makeOneContent(number);
+        let contentBody = clearContent(content.body);
+        if (contentBody.length > 4000){
+            console.log("Content too long!");
+        }
+        else{
             // Send the news
             const channel = client.channels.cache.get(`${CHANEL_ID}`);
-            channel.threads.create({ name: data.title, message: { content: content }, appliedTags: ['1054876475553239090'] });
-
-            console.log("News sent!");
-        });
+            channel.threads.create({ name: content.title, message: { content: contentBody }, appliedTags: ['1054876475553239090'] });
+            // Update the date
+            saveTime();
+            // Update the index number
+            saveNumber(number + 1);
+        }
     }
     else {
         console.log("Not time yet!");
     }
-}, 1000);
+}, 60000);
         
 
 
