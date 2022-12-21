@@ -1,7 +1,7 @@
 FROM node:16
-WORKDIR /src
+WORKDIR /src/
 ENV NODE_ENV=production
-COPY ["package.json", "package-lock.json*", "./"]
+COPY [".\\src\\package.json", ".\\src\\package-lock.json*", "./"]
 RUN npm install --production --silent && mv node_modules ../
 COPY . .
-CMD [ "node", "main.js" ]
+CMD [ "node", ".\\src\\main.js" ]
