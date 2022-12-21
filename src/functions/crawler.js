@@ -110,42 +110,35 @@ async function makeContent() {
 
 async function makeOneContent(index) {
   // Try for a randon number if retunr empty
-  try{
-    let contents = await getContents();
+  let contents = await getContents();
     let content = await getContent(
       contents[index].owner_username,
       contents[index].slug
     );
-    return content;
-  }  
-  catch{
-    console.log("Error, trying again");
-    let contents = await getContents();
-    let random = Math.floor(Math.random() * contents.length);
-    let content = await getContent(
-      contents[random].owner_username,
-      contents[random].slug
-    );
-    return content;
-  }
+  return content; 
 }
+
+
 const {saveNumber, getNumber} = require('./saveindex')
 
 // If index is greather than content.lengt return index to 0
 async function indexReset(){
-  
   let contents = await getContents();
   let index = await getNumber();
   if(index > contents.length){
     index = 0;
-    await saveNumber(index);
+    saveNumber(index);
   }
+  return index;  
 }
+
+indexReset()
 
 function clearContent(imput) {
   let content = imput.replace(/<[^>]*>?/gm, "");
   return content;
 }
+
 
 
 // Export

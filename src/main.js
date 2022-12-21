@@ -37,7 +37,7 @@ this bot make post for each day
 and validate using the time.js function on ./functions
 */
 
-const {saveTime, validateTime} = require('./functions/time');
+const {saveTime, validateTime, getTime} = require('./functions/time');
 const {makeOneContent, clearContent, indexReset} = require('./functions/crawler');
 const {saveNumber, getNumber} = require('./functions/saveindex')
 
@@ -47,36 +47,57 @@ const {saveNumber, getNumber} = require('./functions/saveindex')
 
 // Timer
 // Interval every minute
+// Content sent to discord cant have more than 4000 characters
 setInterval(async function(){
-    if (validateTime()){
-        console.log("Time to post!");
-        // Reset index if needed
-        indexReset();
-        // Get the number of the last post
-        const number = getNumber();
-        // Get the news
-        // Validate if content.body have more than 4000 characters if true dont update date and increase index number
-        let content = await makeOneContent(number);
-        let contentBody = clearContent(content.body);
-        if (contentBody.length > 4000){
-            console.log("Content too long!");
-            // Update the index number
-            saveNumber(number + 1);
+    // Get the index
+    let index = await getNumber();
+    
+    // Reset index if reached the max
+    indexReset();
+    
+    // Validate time
+    let time = await getTime();
+    if(validateTime(time)){
+        try{
+            let content = await makeOneContent(index);
+
+            let clearedBody = clearContent(content.body);
+
+            // Verify if have more than 4000 characters
+            if(clearedBody.length > 4000){
+                // If larger get the only 4000 chars
+                clearedBody = clearedBody.substring(0, 4000);
+                
+                // Send
+                const channel = client.channels.cache.get(`${CHANEL_ID}`);
+                channel.threads.create({ name: content.title, message: { content: clearedBody }, appliedTags: ['1054876475553239090'] });
+
+                // Save the index
+                await saveNumber(index + 1);
+
+                // Save the time
+                saveTime();
+            }
+            else{
+                // Send
+                const channel = client.channels.cache.get(`${CHANEL_ID}`);
+                channel.threads.create({ name: content.title, message: { content: clearedBody }, appliedTags: ['1054876475553239090'] });
+
+                // Save the index
+                await saveNumber(index + 1);
+
+                // Save the time
+                saveTime();
+            }
         }
-        else{
-            // Send the news
-            const channel = client.channels.cache.get(`${CHANEL_ID}`);
-            channel.threads.create({ name: content.title, message: { content: contentBody }, appliedTags: ['1054876475553239090'] });
-            // Update the date
-            saveTime();
-            // Update the index number
-            saveNumber(number + 1);
+        catch(err) {
+            console.error(err);
         }
     }
     else {
-        console.log("Not time yet!");
+        console.log('Time not reached');
     }
-}, 1000);
+}, 60000);
         
 
 
