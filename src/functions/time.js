@@ -8,6 +8,7 @@ and get the current time
 */
 
 const fs = require('fs');
+const path = require('path');
 
 function saveTime(){
     const date = new Date();
@@ -19,11 +20,13 @@ function saveTime(){
         minute: date.getMinutes(),
         second: date.getSeconds()
     }
-    fs.writeFileSync('./time.json', JSON.stringify(time));
+    // Use path
+    fs.writeFileSync(path.join(__dirname, '../time.json'), JSON.stringify(time));
 }
 
 function getTime(){
-    const time = JSON.parse(fs.readFileSync('./time.json'));
+    // Use path
+    const time = JSON.parse(fs.readFileSync(path.join(__dirname, '../time.json')));
     return time;
 }
 
