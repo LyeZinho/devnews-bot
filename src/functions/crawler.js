@@ -20,10 +20,28 @@
   ...
 ]
 */
+const https = require('https');
+
+
 async function getContents() {
   let url = "https://www.tabnews.com.br/api/v1/contents";
-  let response = await fetch(url).then((response) => response.json());
-  return response;
+  let data = "";
+  let contents = [];
+
+  await new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+      res.on("end", () => {
+        contents = JSON.parse(data);
+        resolve();
+      });
+    });
+  }
+  );
+
+  return contents;
 }
 
 // Make content
@@ -51,9 +69,26 @@ async function getContents() {
   */
 
 async function getContent(username, slug) {
+  // Import got
+
   let url = `https://www.tabnews.com.br/api/v1/contents/${username}/${slug}/`;
-  let response = await fetch(url).then((response) => response.json());
-  return response;
+  let data = "";
+  let content = {};
+
+  await new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+      res.on("end", () => {
+        content = JSON.parse(data);
+        resolve();
+      });
+    });
+  }
+  );
+
+  return content;
 }
 
 // Make content
@@ -110,8 +145,7 @@ function clearContent(imput) {
 }
 
 
-
-
+// Export
 module.exports = {
   getContents,
   getContent,
