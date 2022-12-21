@@ -20,29 +20,21 @@
   ...
 ]
 */
-const https = require('https');
+const request = require('request');
 
 
 async function getContents() {
   let url = "https://www.tabnews.com.br/api/v1/contents";
-  let data = "";
-  let contents = [];
-
-  await new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      res.on("data", (chunk) => {
-        data += chunk;
-      });
-      res.on("end", () => {
-        contents = JSON.parse(data);
-        resolve();
-      });
+  return new Promise((resolve, reject) => {
+    request(url, function (error, response, body) {
+      if (error) {
+        reject(error);
+      }
+      resolve(body);
     });
-  }
-  );
-
-  return contents;
+  });
 }
+
 
 // Make content
 /*
@@ -72,23 +64,14 @@ async function getContent(username, slug) {
   // Import got
 
   let url = `https://www.tabnews.com.br/api/v1/contents/${username}/${slug}/`;
-  let data = "";
-  let content = {};
-
-  await new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      res.on("data", (chunk) => {
-        data += chunk;
-      });
-      res.on("end", () => {
-        content = JSON.parse(data);
-        resolve();
-      });
+  return new Promise((resolve, reject) => {
+    request(url, function (error, response, body) {
+      if (error) {
+        reject(error);
+      }
+      resolve(body);
     });
-  }
-  );
-
-  return content;
+  });
 }
 
 // Make content
