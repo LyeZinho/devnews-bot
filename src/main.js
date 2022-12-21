@@ -38,7 +38,7 @@ and validate using the time.js function on ./functions
 */
 
 const {saveTime, validateTime} = require('./functions/time');
-const {makeOneContent, clearContent} = require('./functions/crawler');
+const {makeOneContent, clearContent, indexReset} = require('./functions/crawler');
 const {saveNumber, getNumber} = require('./functions/saveindex')
 
 // Send the news
@@ -49,6 +49,9 @@ const {saveNumber, getNumber} = require('./functions/saveindex')
 // Interval every minute
 setInterval(async function(){
     if (validateTime()){
+        console.log("Time to post!");
+        // Reset index if needed
+        await indexReset();
         // Get the number of the last post
         const number = getNumber();
         // Get the news

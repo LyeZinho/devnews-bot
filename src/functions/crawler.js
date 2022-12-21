@@ -106,6 +106,8 @@ async function makeContent() {
     Finally return the <index> content
     */
 
+
+
 async function makeOneContent(index) {
   // Try for a randon number if retunr empty
   try{
@@ -115,15 +117,27 @@ async function makeOneContent(index) {
       contents[index].slug
     );
     return content;
-  }
+  }  
   catch{
+    console.log("Error, trying again");
     let contents = await getContents();
-    let random = Math.floor(Math.random() * (contents.length - 0) + 0);
+    let random = Math.floor(Math.random() * contents.length);
     let content = await getContent(
       contents[random].owner_username,
       contents[random].slug
     );
     return content;
+  }
+}
+
+// If index is greather than content.lengt return index to 0
+async function indexReset(){
+  const {saveNumber, getNumber} = require('./functions/saveindex')
+  let contents = await getContents();
+  let index = await getNumber();
+  if(index > contents.length){
+    index = 0;
+    await saveNumber(index);
   }
 }
 
@@ -140,4 +154,5 @@ module.exports = {
   makeContent,
   makeOneContent,
   clearContent,
+  indexReset
 };
