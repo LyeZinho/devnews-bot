@@ -57,6 +57,8 @@ setInterval(async function(){
         let contentBody = clearContent(content.body);
         if (contentBody.length > 4000){
             console.log("Content too long!");
+            // Update the index number
+            saveNumber(number + 1);
         }
         else{
             // Send the news
