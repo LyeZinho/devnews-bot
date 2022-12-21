@@ -51,7 +51,7 @@ setInterval(async function(){
     if (validateTime()){
         console.log("Time to post!");
         // Reset index if needed
-        await indexReset();
+        indexReset();
         // Get the number of the last post
         const number = getNumber();
         // Get the news
@@ -76,7 +76,7 @@ setInterval(async function(){
     else {
         console.log("Not time yet!");
     }
-}, 60000);
+}, 1000);
         
 
 

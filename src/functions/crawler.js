@@ -129,10 +129,11 @@ async function makeOneContent(index) {
     return content;
   }
 }
+const {saveNumber, getNumber} = require('./saveindex')
 
 // If index is greather than content.lengt return index to 0
 async function indexReset(){
-  const {saveNumber, getNumber} = require('./functions/saveindex')
+  
   let contents = await getContents();
   let index = await getNumber();
   if(index > contents.length){
