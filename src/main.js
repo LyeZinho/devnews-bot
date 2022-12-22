@@ -1,9 +1,10 @@
 // Express server
+require('dotenv').config();
 const express = require('express');
 const app = express();
 
 // Discord bot
-require('dotenv').config();
+
 const { Client, Routes, InteractionType } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 
@@ -11,6 +12,8 @@ const CLIENT_ID =  process.env.CLIENT_ID;
 const GUILD_ID =  process.env.GUILD_ID;
 const TOKEN = process.env.DISCORD_TOKEN;
 const CHANEL_ID = process.env.CHANEL_ID;
+
+console.log(TOKEN);
 
 const client = new Client({
     intents: [
